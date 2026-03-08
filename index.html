@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUSO Connect - Luật An Ninh Mạng 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Inter:wght@300;400;600&display=swap');
+        
+        @font-face {
+            font-family: 'BahnarDisplay';
+            src: url('https://static-eu.webapp-portal.com/resources/freeqrd/lp/745130/6.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'BahnarDisplay';
+            src: url('https://static-eu.webapp-portal.com/resources/freeqrd/lp/745130/7.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'BahnarText';
+            src: url('https://static-eu.webapp-portal.com/resources/freeqrd/lp/745130/8.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        /*
+        body { font-family: 'Inter', 'Segoe UI', sans-serif; }
+
+        body.lang-ba, body.lang-ba input, body.lang-ba button, body.lang-ba h3, body.lang-ba p, body.lang-ba div, body.lang-ba span {
+            font-family: 'BahnarText', 'Inter', sans-serif !important;
+        }
+        body.lang-ba h1, body.lang-ba h2 {
+            font-family: 'BahnarDisplay', 'Inter', sans-serif !important;
+        }
+        */
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-gold: #ffd700;
+            --neon-red: #ff2a6d;
+            --glass-bg: rgba(17, 25, 40, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.125);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050b14;
+            color: #e2e8f0;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 243, 255, 0.05) 0%, transparent 25%), 
+                radial-gradient(circle at 85% 30%, rgba(255, 42, 109, 0.05) 0%, transparent 25%);
+            overflow-x: hidden;
+        }
+
+        .font-tech { font-family: 'Orbitron', sans-serif; }
+        .font-mono-tech { font-family: 'Rajdhani', monospace; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-blue); }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid var(--glass-border);
+        }
+
+        /* Animation Classes */
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        
+        .animate-scan {
+            background: linear-gradient(to bottom, transparent, var(--neon-blue), transparent);
+            background-size: 100% 200%;
+            animation: scanning 3s linear infinite;
+        }
+        @keyframes scanning { 0% { background-position: 0% -100%; } 100% { background-position: 0% 200%; } }
+
+        /* Grid Background */
+        .cyber-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+        }
+
+        /* Check-in Frame Styles */
+        #checkin-area {
+            position: relative; width: 320px; height: 320px; margin: 0 auto;
+            background-color: #0f172a; overflow: hidden; border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
+            border: 2px solid var(--neon-blue);
+        }
+        #user-photo { width: 100%; height: 100%; object-fit: cover; }
+        .frame-overlay {
+            position: absolute; inset: 0; pointer-events: none;
+            background: url('https://i.imgur.com/your-tech-frame.png') center/cover;
+            border: 10px solid rgba(0, 243, 255, 0.1);
+            display: flex; flex-direction: column; justify-content: space-between; padding: 15px;
+        }
+        .frame-badge {
+            background: rgba(0, 0, 0, 0.7); border: 1px solid var(--neon-gold);
+            color: var(--neon-gold); padding: 5px 10px; font-size: 10px;
+            font-family: 'Orbitron', sans-serif; text-transform: uppercase;
+            align-self: flex-start; backdrop-filter: blur(4px);
+        }
+        .frame-footer {
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 10px; text-align: center;
+        }
+
+        /* Modal & Tabs */
+        .modal-wrapper { opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.3s ease; }
+        .modal-wrapper.active { opacity: 1; visibility: visible; pointer-events: auto; }
+        
+        .tab-btn.active {
+            background-color: rgba(0, 243, 255, 0.1);
+            border-bottom: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+        }
+
+        /* Chat Styles */
+        .chat-message { max-width: 85%; padding: 12px 16px; border-radius: 12px; margin-bottom: 12px; font-size: 0.9rem; line-height: 1.5; }
+        .chat-user { background: rgba(0, 243, 255, 0.2); align-self: flex-end; color: white; border-bottom-right-radius: 2px; }
+        .chat-bot { background: rgba(255, 255, 255, 0.1); align-self: flex-start; color: #e2e8f0; border-bottom-left-radius: 2px; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .typing-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background-color: #ccc; animation: typing 1.4s infinite ease-in-out both; margin: 0 2px; }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        
+        /* Video Button Active State */
+        .lang-btn-active {
+            background-color: rgba(0, 243, 255, 0.15) !important;
+            color: #00f3ff !important;
+            border-bottom: 2px solid #00f3ff;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-cyan-500 selection:text-white">
+
+    <div class="fixed inset-0 cyber-grid -z-10"></div>
+
+    <nav class="fixed top-0 w-full z-50 glass-card border-b border-white/10 px-6 py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-shield-cat text-cyan-400 text-2xl animate-pulse"></i>
+                <div class="leading-none">
+                    <h1 class="font-tech text-xl text-white tracking-widest">PUSO<span class="text-cyan-400">CONNECT</span></h1>
+                    <span class="text-[10px] text-gray-400 font-mono-tech tracking-widest">SECURE NETWORK 2025</span>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex gap-6 text-sm font-mono-tech font-bold text-gray-400">
+                <a href="#overview" class="hover:text-cyan-400 transition" data-i18n="nav_overview">TỔNG QUAN</a>
+                <a href="#structure" class="hover:text-cyan-400 transition" data-i18n="nav_structure">CẤU TRÚC</a>
+                <a href="#compliance" class="hover:text-cyan-400 transition" data-i18n="nav_search">TRA CỨU</a>
+                <a href="#checkin" class="hover:text-cyan-400 transition" data-i18n="nav_checkin">CHECK-IN</a>
+                <a href="#minigame" class="text-yellow-400 hover:text-yellow-200 transition animate-pulse" data-i18n="nav_minigame">MINI GAME</a>
+            </div>
+
+            <div class="flex gap-2 sm:gap-3 items-center">
+                <button onclick="setLanguage('vn')" id="nav-btn-vn" class="text-xs font-bold text-cyan-400 hover:text-white transition">VN</button>
+                <span class="text-gray-600">|</span>
+                <button onclick="setLanguage('en')" id="nav-btn-en" class="text-xs font-bold text-gray-500 hover:text-white transition">EN</button>
+                <span class="text-gray-600">|</span>
+                <button onclick="setLanguage('ba')" id="nav-btn-ba" class="text-xs font-bold text-gray-500 hover:text-white transition">BA</button>
+                
+                <button onclick="openDocViewer()" class="ml-2 sm:ml-4 bg-cyan-500/10 border border-cyan-500/50 text-cyan-400 px-3 sm:px-4 py-2 rounded text-xs font-bold hover:bg-cyan-500 hover:text-black transition flex items-center gap-2">
+                    <i class="fa-solid fa-database"></i> <span class="hidden sm:inline" data-i18n="nav_data">DỮ LIỆU GỐC</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="pt-32 pb-20 relative overflow-hidden">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="inline-flex items-center gap-2 border border-yellow-500/30 bg-yellow-500/10 px-4 py-1 rounded-full text-yellow-400 text-xs font-mono-tech mb-6 animate-float">
+                <span class="w-2 h-2 bg-yellow-400 rounded-full animate-ping"></span>
+                <span data-i18n="hero_badge">DỰ THẢO CHÍNH THỨC 2025 • KỲ HỌP THỨ 10 - QUỐC HỘI KHÓA XV</span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-tech font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-cyan-500 filter drop-shadow-[0_0_15px_rgba(0,243,255,0.3)]" data-i18n="hero_title">
+                LUẬT AN NINH MẠNG
+            </h1>
+            
+            <p class="text-gray-400 max-w-2xl mx-auto mb-8 text-lg leading-relaxed">
+                <span data-i18n="hero_desc_1">Hành lang pháp lý bảo vệ chủ quyền số quốc gia.</span> <br>
+                <span class="text-cyan-400" data-i18n="hero_desc_2">Thống nhất • Đồng bộ • Hội nhập quốc tế.</span>
+            </p>
+
+            <div class="max-w-4xl mx-auto mb-8 relative group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                <div class="relative bg-black rounded-lg border border-cyan-500/30 overflow-hidden shadow-[0_0_50px_rgba(0,243,255,0.15)]">
+                    <div class="bg-slate-900/80 backdrop-blur border-b border-cyan-500/20 p-2 flex justify-between items-center text-[10px] text-cyan-400 font-mono-tech px-4">
+                        <span><i class="fa-solid fa-play-circle animate-pulse mr-2"></i>LIVE FEED: TUYEN_TRUYEN_ANM_2025.MP4</span>
+                        <span>REC ●</span>
+                    </div>
+                    <div class="relative pt-[56.25%]"> <iframe id="main-video" src="https://drive.google.com/file/d/1Ip4jd_lbhvt_gd1LorUqR-5Ca1dnxQzT/preview" class="absolute top-0 left-0 w-full h-full border-none" allow="autoplay"></iframe>
+                    </div>
+                    
+                    <div class="flex border-t border-cyan-500/30 divide-x divide-cyan-500/30 bg-slate-900/90 backdrop-blur">
+                        <button onclick="setLanguage('vn')" class="flex-1 py-3 text-[10px] sm:text-xs font-bold font-mono-tech text-gray-400 hover:text-cyan-400 hover:bg-cyan-500/10 transition lang-btn-active" id="btn-lang-vn">
+                            <i class="fa-solid fa-flag text-red-500 mr-1 sm:mr-2"></i>TIẾNG VIỆT
+                        </button>
+                        <button onclick="setLanguage('en')" class="flex-1 py-3 text-[10px] sm:text-xs font-bold font-mono-tech text-gray-400 hover:text-cyan-400 hover:bg-cyan-500/10 transition" id="btn-lang-en">
+                            <i class="fa-solid fa-globe text-blue-400 mr-1 sm:mr-2"></i>ENGLISH
+                        </button>
+                        <button onclick="setLanguage('ba')" class="flex-1 py-3 text-[10px] sm:text-xs font-bold font-mono-tech text-gray-400 hover:text-cyan-400 hover:bg-cyan-500/10 transition" id="btn-lang-ba">
+                            <i class="fa-solid fa-language text-green-400 mr-1 sm:mr-2"></i>BAHNAR
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4 mb-10">
+                <button onclick="openInfoGraphic()" class="px-6 py-3 bg-slate-800 border border-cyan-500/30 text-cyan-400 rounded hover:bg-cyan-900/30 hover:border-cyan-400 transition flex items-center gap-2 text-sm font-bold">
+                    <i class="fa-solid fa-image"></i> <span data-i18n="btn_infographic">XEM INFOGRAPHIC (BẢN TƯƠNG ỨNG)</span>
+                </button>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#structure" class="group relative px-8 py-4 bg-cyan-600 text-white font-bold rounded overflow-hidden">
+                    <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1s_infinite]"></div>
+                    <span class="relative flex items-center gap-2"><i class="fa-solid fa-microchip"></i> <span data-i18n="btn_explore">KHÁM PHÁ NGAY</span></span>
+                </a>
+                <a href="#compliance" class="px-8 py-4 border border-gray-600 text-gray-300 font-bold rounded hover:border-cyan-400 hover:text-cyan-400 transition flex items-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="btn_lookup">TRA CỨU HÀNH VI</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="absolute top-1/2 left-10 w-64 h-64 bg-cyan-500/20 rounded-full blur-[100px] -z-10"></div>
+        <div class="absolute bottom-0 right-10 w-64 h-64 bg-pink-500/10 rounded-full blur-[100px] -z-10"></div>
+    </header>
+
+    <main class="container mx-auto px-4 space-y-24 pb-20">
+
+        <section id="overview">
+            <div class="flex items-end gap-4 mb-8 border-b border-gray-800 pb-4">
+                <h2 class="text-3xl font-tech text-white" data-i18n="sec_overview">01 // TỔNG QUAN</h2>
+                <span class="text-cyan-500 font-mono-tech text-sm">SYSTEM_OVERVIEW</span>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-xl relative group hover:border-cyan-500/50 transition duration-300">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl font-tech"><i class="fa-solid fa-globe"></i></div>
+                    <h3 class="text-xl font-bold text-cyan-300 mb-3" data-i18n="card_context_title">Bối cảnh cấp thiết</h3>
+                    <p class="text-sm text-gray-400 text-justify" data-i18n="card_context_desc">
+                        CMCN 4.0 phát triển mạnh mẽ. Luật cũ (ATTTM 2015, ANM 2018) còn chồng chéo, mâu thuẫn. Cần hoàn thiện thể chế để ứng phó với tội phạm công nghệ cao và hội nhập quốc tế (Công ước LHQ).
+                    </p>
+                </div>
+
+                <div class="glass-card p-6 rounded-xl relative group hover:border-cyan-500/50 transition duration-300">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl font-tech"><i class="fa-solid fa-crosshairs"></i></div>
+                    <h3 class="text-xl font-bold text-yellow-400 mb-3" data-i18n="card_purpose_title">Mục đích tối thượng</h3>
+                    <ul class="text-sm text-gray-400 space-y-2" data-i18n="card_purpose_list">
+                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Thống nhất hệ thống pháp luật.</li>
+                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Bảo vệ dữ liệu & hệ thống thông tin.</li>
+                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Chủ động phòng thủ & tấn công mạng.</li>
+                    </ul>
+                </div>
+
+                 <div class="glass-card p-6 rounded-xl relative group hover:border-cyan-500/50 transition duration-300">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl font-tech"><i class="fa-solid fa-users-viewfinder"></i></div>
+                    <h3 class="text-xl font-bold text-pink-400 mb-3" data-i18n="card_scope_title">Phạm vi & Đối tượng</h3>
+                    <div class="text-sm text-gray-400 space-y-3" data-i18n="card_scope_desc">
+                        <div><strong class="text-gray-200">Phạm vi:</strong> Bảo vệ ANQG, trật tự ATXH, quyền lợi hợp pháp trên không gian mạng.</div>
+                        <div><strong class="text-gray-200">Đối tượng:</strong> Cơ quan, tổ chức, cá nhân Việt Nam & Nước ngoài.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 glass-card p-6 rounded-xl flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+                <div class="font-mono-tech text-gray-400 text-xs">TIMELINE_PROCESS</div>
+                <div class="flex-1 flex items-center justify-between w-full md:w-auto px-4 gap-2">
+                    <div class="text-center">
+                        <div class="text-xs text-gray-500">10/12/2025</div>
+                        <div class="text-yellow-400 font-bold" data-i18n="time_passed">THÔNG QUA</div>
+                    </div>
+                    <div class="h-[2px] bg-gray-700 flex-1 relative">
+                        <div class="absolute top-1/2 left-0 h-full bg-cyan-500 w-1/2"></div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xs text-gray-500">01/07/2026</div>
+                        <div class="text-cyan-400 font-bold" data-i18n="time_effective">HIỆU LỰC</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="structure">
+            <div class="flex items-end gap-4 mb-8 border-b border-gray-800 pb-4">
+                <h2 class="text-3xl font-tech text-white" data-i18n="sec_structure">02 // CẤU TRÚC DỮ LIỆU</h2>
+                <span class="text-cyan-500 font-mono-tech text-sm">DATA_STRUCTURE_V2025</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="glass-card p-5 rounded hover:bg-gray-800 transition cursor-default">
+                    <div class="text-xs font-mono-tech text-cyan-500 mb-1">CH I (1-10)</div>
+                    <h3 class="font-bold text-white text-lg mb-2" data-i18n="ch1_title">Quy định chung</h3>
+                </div>
+                <div class="glass-card p-5 rounded hover:bg-gray-800 transition cursor-default">
+                    <div class="text-xs font-mono-tech text-cyan-500 mb-1">CH II (11-16)</div>
+                    <h3 class="font-bold text-white text-lg mb-2" data-i18n="ch2_title">Bảo vệ HTTT Quan trọng</h3>
+                </div>
+                <div class="glass-card p-5 rounded hover:bg-gray-800 transition cursor-default border-l-2 border-red-500">
+                    <div class="text-xs font-mono-tech text-red-500 mb-1">CH III (17-26)</div>
+                    <h3 class="font-bold text-white text-lg mb-2" data-i18n="ch3_title">Phòng ngừa & Xử lý</h3>
+                </div>
+                <div class="glass-card p-5 rounded hover:bg-gray-800 transition cursor-default">
+                    <div class="text-xs font-mono-tech text-cyan-500 mb-1">CH IV (27-32)</div>
+                    <h3 class="font-bold text-white text-lg mb-2" data-i18n="ch4_title">Hoạt động bảo vệ</h3>
+                </div>
+                <div class="glass-card p-5 rounded hover:bg-gray-800 transition cursor-default">
+                    <div class="text-xs font-mono-tech text-cyan-500 mb-1">CH V (33-35)</div>
+                    <h3 class="font-bold text-white text-lg mb-2" data-i18n="ch5_title">Tiêu chuẩn kỹ thuật</h3>
+                </div>
+                <div class="glass-card p-5 rounded hover:bg-gray-800 transition cursor-default">
+                    <div class="text-xs font-mono-tech text-cyan-500 mb-1">CH VI (36-39)</div>
+                    <h3 class="font-bold text-white text-lg mb-2" data-i18n="ch6_title">Kinh doanh ANM</h3>
+                </div>
+                <div class="glass-card p-5 rounded hover:bg-gray-800 transition cursor-default">
+                    <div class="text-xs font-mono-tech text-cyan-500 mb-1">CH VII (40-49)</div>
+                    <h3 class="font-bold text-white text-lg mb-2" data-i18n="ch7_title">Điều kiện bảo đảm</h3>
+                </div>
+                <div class="glass-card p-5 rounded hover:bg-gray-800 transition cursor-default">
+                    <div class="text-xs font-mono-tech text-cyan-500 mb-1">CH VIII (50-56)</div>
+                    <h3 class="font-bold text-white text-lg mb-2" data-i18n="ch8_title">Trách nhiệm pháp lý</h3>
+                </div>
+                 <div class="glass-card p-5 rounded hover:bg-gray-800 transition cursor-default">
+                    <div class="text-xs font-mono-tech text-cyan-500 mb-1">CH IX (57-58)</div>
+                    <h3 class="font-bold text-white text-lg mb-2" data-i18n="ch9_title">Điều khoản thi hành</h3>
+                </div>
+            </div>
+        </section>
+
+        <section id="compliance">
+            <div class="flex items-end gap-4 mb-8 border-b border-gray-800 pb-4">
+                <h2 class="text-3xl font-tech text-white" data-i18n="sec_compliance">03 // CƠ SỞ DỮ LIỆU TUÂN THỦ</h2>
+                <span class="text-cyan-500 font-mono-tech text-sm">COMPLIANCE_DB</span>
+            </div>
+
+            <div class="glass-card rounded-xl overflow-hidden min-h-[500px] flex flex-col md:flex-row">
+                <div class="w-full md:w-1/4 bg-slate-900/50 border-r border-white/10 p-4">
+                    <div class="relative mb-6">
+                        <i class="fa-solid fa-search absolute left-3 top-3 text-gray-500"></i>
+                        <input type="text" id="act-search" placeholder="..." onkeyup="filterActs()"
+                            class="w-full bg-slate-800 border border-gray-700 rounded p-2 pl-9 text-sm text-white focus:border-cyan-500 focus:outline-none">
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <button onclick="switchTab('prohibited')" id="tab-prohibited" class="tab-btn active w-full text-left p-3 rounded text-sm font-bold flex items-center justify-between transition hover:bg-white/5">
+                            <span><i class="fa-solid fa-ban text-red-500 mr-2"></i> <span data-i18n="tab_prohibited">NGHIÊM CẤM</span></span>
+                            <span class="bg-red-500/20 text-red-500 text-[10px] px-2 rounded-full" id="count-prohibited">0</span>
+                        </button>
+                        <button onclick="switchTab('encouraged')" id="tab-encouraged" class="tab-btn w-full text-left p-3 rounded text-sm font-bold flex items-center justify-between text-gray-400 transition hover:bg-white/5">
+                            <span><i class="fa-solid fa-check-circle text-green-500 mr-2"></i> <span data-i18n="tab_encouraged">KHUYẾN KHÍCH</span></span>
+                            <span class="bg-green-500/20 text-green-500 text-[10px] px-2 rounded-full" id="count-encouraged">0</span>
+                        </button>
+                    </div>
+
+                    <div class="mt-8 p-4 bg-gradient-to-br from-indigo-900 to-purple-900 rounded-lg border border-indigo-500/30">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                            <span class="text-xs font-bold text-indigo-200">PUSO AI ASSISTANT</span>
+                        </div>
+                        <p class="text-xs text-indigo-300 mb-3" data-i18n="ai_desc">Trợ lý ảo Puso đã học toàn bộ tài liệu Dự thảo.</p>
+                        <button onclick="toggleChatModal()" class="w-full bg-indigo-500 hover:bg-indigo-400 text-white text-xs py-2 rounded font-bold transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-robot"></i> <span data-i18n="btn_chat">CHAT VỚI PUSO AI</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex-1 p-6 relative overflow-y-auto max-h-[600px]" id="acts-container">
+                    <div id="list-content" class="space-y-3">
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="checkin">
+            <div class="flex items-end gap-4 mb-8 border-b border-gray-800 pb-4">
+                <h2 class="text-3xl font-tech text-white" data-i18n="sec_checkin">04 // ĐỊNH DANH CÔNG DÂN SỐ</h2>
+                <span class="text-cyan-500 font-mono-tech text-sm">DIGITAL_ID_GENERATOR</span>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl border border-cyan-500/30">
+                <div class="flex flex-col lg:flex-row gap-10 items-center justify-center">
+                    
+                    <div class="relative group">
+                        <div id="checkin-area">
+                            <img id="user-photo" src="https://ui-avatars.com/api/?name=User&background=0f172a&color=334155&size=400" alt="Avatar">
+                            <div class="frame-overlay">
+                                <div class="flex justify-between items-start w-full">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Coat_of_arms_of_Vietnam.svg/1200px-Coat_of_arms_of_Vietnam.svg.png" class="w-10 h-10 drop-shadow-lg filter brightness-110">
+                                    <div class="text-right">
+                                        <div class="frame-badge">VERIFIED CITIZEN</div>
+                                        <div class="text-[8px] text-cyan-400 font-mono-tech mt-1 tracking-widest">ID: VN-2025-SECURE</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="frame-footer">
+                                    <div class="text-cyan-400 font-tech text-lg font-bold tracking-wider" data-i18n="id_text">TÔI TÌM HIỂU LUẬT ANM 2025</div>
+                                    <div class="text-gray-400 text-[9px] uppercase tracking-widest mt-1">PUSO CONNECT SYSTEM</div>
+                                </div>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent h-4 w-full animate-scan pointer-events-none"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 max-w-md space-y-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2" data-i18n="checkin_title">Tạo thẻ chứng nhận</h3>
+                            <p class="text-gray-400 text-sm" data-i18n="checkin_desc">Xác nhận cam kết của bạn đối với không gian mạng an toàn.</p>
+                        </div>
+
+                        <div class="space-y-3">
+                            <button onclick="document.getElementById('upload-input').click()" class="w-full py-3 px-4 rounded border border-gray-600 text-gray-300 hover:border-cyan-400 hover:text-cyan-400 transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-camera"></i> <span data-i18n="btn_upload">TẢI ẢNH LÊN</span>
+                            </button>
+                            <input type="file" id="upload-input" accept="image/*" class="hidden">
+
+                            <button onclick="downloadCheckin()" class="w-full py-3 px-4 rounded bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-download"></i> <span data-i18n="btn_download">XUẤT THẺ ID</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="minigame">
+            <div class="flex items-end gap-4 mb-8 border-b border-gray-800 pb-4">
+                <h2 class="text-3xl font-tech text-white" data-i18n="sec_minigame">05 // THỬ THÁCH AN NINH MẠNG</h2>
+                <span class="text-yellow-500 font-mono-tech text-sm">CYBER_CHALLENGE_V2</span>
+            </div>
+
+            <div class="glass-card rounded-2xl p-8 relative overflow-hidden min-h-[400px]">
+                <div id="game-start" class="text-center h-full flex flex-col justify-center items-center gap-6">
+                    <div class="w-20 h-20 bg-yellow-500/20 rounded-full flex items-center justify-center animate-pulse">
+                        <i class="fa-solid fa-trophy text-4xl text-yellow-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-2" data-i18n="game_title">TRẮC NGHIỆM KIẾN THỨC</h3>
+                        <p class="text-gray-400 max-w-lg mx-auto" data-i18n="game_desc">Vượt qua 10 câu hỏi từ dữ liệu Dự thảo Luật.</p>
+                    </div>
+                    <button onclick="startGame()" class="px-8 py-3 bg-yellow-500 hover:bg-yellow-400 text-black font-bold rounded shadow-[0_0_20px_rgba(255,215,0,0.4)] transition" data-i18n="btn_start_game">
+                        BẮT ĐẦU NGAY
+                    </button>
+                </div>
+
+                <div id="game-play" class="hidden h-full flex flex-col">
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="text-sm font-mono-tech text-cyan-500">QUESTION <span id="q-current">1</span>/5</div>
+                        <div class="text-sm font-mono-tech text-yellow-400">SCORE: <span id="current-score">0</span></div>
+                    </div>
+                    <div class="bg-slate-900/50 p-6 rounded-xl border border-white/10 mb-6 flex-1">
+                        <h4 id="question-text" class="text-lg md:text-xl text-white font-medium leading-relaxed">Loading...</h4>
+                    </div>
+                    <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                </div>
+
+                <div id="game-result" class="hidden h-full flex flex-col justify-center items-center gap-6 text-center animate-[fadeIn_0.5s]">
+                    <div id="result-icon" class="text-6xl text-cyan-500 mb-2"><i class="fa-solid fa-medal"></i></div>
+                    <div>
+                        <h3 class="text-3xl font-tech text-white mb-2" data-i18n="game_finish">HOÀN THÀNH!</h3>
+                        <p class="text-gray-400" data-i18n="game_finish_desc">Bạn đã hoàn thành bài kiểm tra.</p>
+                    </div>
+                    <div class="text-5xl font-mono-tech font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 my-4">
+                        <span id="final-score">80</span>/50
+                    </div>
+                    <button onclick="resetGame()" class="px-6 py-2 border border-gray-600 text-gray-300 rounded hover:border-cyan-400 hover:text-cyan-400 transition" data-i18n="btn_replay">Chơi lại</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#020617] border-t border-cyan-500/30 pt-16 pb-8 mt-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="grid md:grid-cols-2 gap-10 mb-12">
+                <div class="space-y-4">
+                    <div>
+                        <h2 class="text-3xl font-tech text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 font-bold mb-1">PUSO-LVKONTUM</h2>
+                        <p class="text-cyan-400 italic font-mono-tech tracking-wider text-sm border-l-2 border-cyan-500 pl-3">"Lan tỏa tri thức - Kết nối tương lai"</p>
+                    </div>
+                    <p class="text-gray-400 text-sm">PUSOConnect 2025</p>
+                    <div class="text-xs text-gray-500">Email: <span class="text-cyan-500">puso.lienvietkontum@gmail.com</span></div>
+                </div>
+                <div class="bg-white/5 border border-white/10 p-6 rounded-xl hover:border-cyan-500/30 transition">
+                    <div class="text-[10px] text-yellow-500 font-mono-tech tracking-widest mb-3 uppercase flex items-center gap-2">
+                        <span class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+                        Project
+                    </div>
+                    <h3 class="text-white text-sm font-bold leading-relaxed uppercase font-tech" data-i18n="project_title">
+                        XÂY DỰNG BỘ ẤN PHẨM ĐA NGÔN NGỮ TUYÊN TRUYỀN, GIÁO DỤC PHÁP LUẬT VỀ AN NINH MẠNG VÀ PHÒNG CHỐNG TỘI PHẠM CÔNG NGHỆ CAO CHO THANH THIẾU NIÊN
+                    </h3>
+                </div>
+            </div>
+
+            <div class="text-center mt-10 text-[10px] text-gray-700 font-mono-tech">
+                © 2025 PUSO-LVKONTUM SYSTEM. ALL RIGHTS RESERVED.
+            </div>
+        </div>
+    </footer>
+
+    <div id="doc-viewer-modal" class="modal-wrapper fixed inset-0 z-[100] flex items-center justify-center">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" onclick="closeDocViewer()"></div>
+        <div class="relative w-[95%] h-[90%] bg-[#0a0f1c] border border-cyan-500/30 rounded shadow-[0_0_50px_rgba(0,243,255,0.1)] flex flex-col overflow-hidden animate-[float_0.3s_ease-out]">
+            <div class="bg-slate-900 border-b border-cyan-900/50 p-3 flex justify-between items-center text-cyan-400">
+                <div class="flex items-center gap-3"><i class="fa-solid fa-server animate-pulse"></i><span class="font-mono-tech tracking-widest text-sm">DATABASE_ACCESS: <span class="text-white" id="modal-title">DOCUMENTS</span></span></div>
+                <button onclick="closeDocViewer()" class="hover:text-red-500 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="flex-1 bg-white relative">
+                 <div id="viewer-loading" class="absolute inset-0 bg-[#0a0f1c] flex flex-col items-center justify-center z-10 text-cyan-500">
+                    <div class="text-4xl font-tech mb-4">DECRYPTING...</div>
+                    <div class="w-64 h-1 bg-gray-800 rounded overflow-hidden">
+                        <div class="h-full bg-cyan-500 animate-[loading_1.5s_ease-in-out_infinite]"></div>
+                    </div>
+                </div>
+                <iframe id="doc-frame" class="w-full h-full border-none"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div id="chat-modal" class="modal-wrapper fixed inset-0 z-[100] flex items-end sm:items-center justify-end sm:justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleChatModal()"></div>
+        <div class="relative w-full max-w-md h-[600px] bg-[#0a0f1c] border border-indigo-500/50 rounded-xl shadow-[0_0_50px_rgba(99,102,241,0.2)] flex flex-col overflow-hidden animate-[float_0.3s_ease-out]">
+            <div class="bg-indigo-900/50 border-b border-indigo-500/30 p-4 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <div><h3 class="text-white font-bold text-sm">PUSO AI ASSISTANT</h3><div class="text-[10px] text-indigo-300">Dữ liệu: Dự thảo Luật 2025</div></div>
+                </div>
+                <button onclick="toggleChatModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="chat-body" class="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-slate-900/50">
+                <div class="chat-bot p-3 rounded-lg text-sm">Xin chào! Tôi có thể giúp gì cho bạn?</div>
+            </div>
+            <div id="suggestions-container" class="suggestions-container"></div>
+            <div class="p-4 bg-slate-800 border-t border-white/5">
+                <form id="chat-form" onsubmit="handleChat(event)" class="flex gap-2">
+                    <input type="text" id="chat-input" placeholder="..." class="flex-1 bg-black/50 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none">
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white w-10 h-10 rounded-lg flex items-center justify-center transition"><i class="fa-solid fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. GLOBAL VARIABLES & TRANSLATION ---
+        let currentLang = 'vn';
+        
+        // Updated Video Links
+        const videoVN = "https://drive.google.com/file/d/1Ip4jd_lbhvt_gd1LorUqR-5Ca1dnxQzT/preview";
+        const videoEN = "https://drive.google.com/file/d/1fWobGKKV-tG-CqYFsX8Y2zxOv4phaofb/preview";
+        const videoBA = "https://drive.google.com/file/d/1Ip4jd_lbhvt_gd1LorUqR-5Ca1dnxQzT/preview"; // Thay thế bằng link tiếng Bahnar nếu có
+        
+        // Updated InfoGraphic Links
+        const infoGraphicVN = "https://drive.google.com/file/d/1uuvmDtiyGbi_LzScPQbrvrWfJvF5xZVR/preview";
+        const infoGraphicEN = "https://drive.google.com/file/d/1Jr9Sl0N7DYn-FiPzx5bAOFIFb6kzC0FB/preview";
+        const infoGraphicBA = "https://drive.google.com/file/d/1uuvmDtiyGbi_LzScPQbrvrWfJvF5xZVR/preview"; // Thay thế bằng link tiếng Bahnar nếu có
+
+        const translations = {
+            vn: {
+                nav_overview: "TỔNG QUAN", nav_structure: "CẤU TRÚC", nav_search: "TRA CỨU", nav_checkin: "CHECK-IN", nav_minigame: "MINI GAME", nav_data: "DỮ LIỆU GỐC",
+                hero_badge: "DỰ THẢO CHÍNH THỨC 2025 • KỲ HỌP THỨ 10 - QUỐC HỘI KHÓA XV",
+                hero_title: "LUẬT AN NINH MẠNG",
+                hero_desc_1: "Hành lang pháp lý bảo vệ chủ quyền số quốc gia.", hero_desc_2: "Thống nhất • Đồng bộ • Hội nhập quốc tế.",
+                btn_infographic: "XEM INFOGRAPHIC (BẢN TIẾNG VIỆT)", btn_explore: "KHÁM PHÁ NGAY", btn_lookup: "TRA CỨU HÀNH VI",
+                sec_overview: "01 // TỔNG QUAN",
+                card_context_title: "Bối cảnh cấp thiết", card_context_desc: "CMCN 4.0 phát triển mạnh mẽ. Luật cũ (ATTTM 2015, ANM 2018) còn chồng chéo, mâu thuẫn. Cần hoàn thiện thể chế để ứng phó với tội phạm công nghệ cao và hội nhập quốc tế.",
+                card_purpose_title: "Mục đích tối thượng", card_purpose_list: `<li><i class="fa-solid fa-check text-green-500 mr-2"></i>Thống nhất hệ thống pháp luật.</li><li><i class="fa-solid fa-check text-green-500 mr-2"></i>Bảo vệ dữ liệu & hệ thống thông tin.</li><li><i class="fa-solid fa-check text-green-500 mr-2"></i>Chủ động phòng thủ & tấn công mạng.</li>`,
+                card_scope_title: "Phạm vi & Đối tượng", card_scope_desc: `<div><strong class="text-gray-200">Phạm vi:</strong> Bảo vệ ANQG, trật tự ATXH, quyền lợi hợp pháp trên không gian mạng.</div><div><strong class="text-gray-200">Đối tượng:</strong> Cơ quan, tổ chức, cá nhân Việt Nam & Nước ngoài.</div>`,
+                time_passed: "THÔNG QUA", time_effective: "HIỆU LỰC",
+                sec_structure: "02 // CẤU TRÚC DỮ LIỆU",
+                ch1_title: "Quy định chung", ch2_title: "Bảo vệ HTTT Quan trọng", ch3_title: "Phòng ngừa & Xử lý", ch4_title: "Hoạt động bảo vệ", ch5_title: "Tiêu chuẩn kỹ thuật", ch6_title: "Kinh doanh ANM", ch7_title: "Điều kiện bảo đảm", ch8_title: "Trách nhiệm pháp lý", ch9_title: "Điều khoản thi hành",
+                sec_compliance: "03 // CƠ SỞ DỮ LIỆU TUÂN THỦ",
+                tab_prohibited: "NGHIÊM CẤM", tab_encouraged: "KHUYẾN KHÍCH",
+                ai_desc: "Trợ lý ảo Puso đã học toàn bộ tài liệu Dự thảo.", btn_chat: "CHAT VỚI PUSO AI",
+                sec_checkin: "04 // ĐỊNH DANH CÔNG DÂN SỐ",
+                checkin_title: "Tạo thẻ chứng nhận", checkin_desc: "Xác nhận cam kết của bạn đối với không gian mạng an toàn.", btn_upload: "TẢI ẢNH LÊN", btn_download: "XUẤT THẺ ID", id_text: "TÔI TÌM HIỂU LUẬT ANM 2025",
+                sec_minigame: "05 // THỬ THÁCH AN NINH MẠNG",
+                game_title: "TRẮC NGHIỆM KIẾN THỨC", game_desc: "Vượt qua 10 câu hỏi từ dữ liệu Dự thảo Luật An ninh mạng 2025. Kiểm tra kiến thức của bạn ngay!", btn_start_game: "BẮT ĐẦU NGAY", game_finish: "HOÀN THÀNH!", game_finish_desc: "Bạn đã hoàn thành bài kiểm tra.", btn_replay: "Chơi lại",
+                project_title: "XÂY DỰNG BỘ ẤN PHẨM ĐA NGÔN NGỮ TUYÊN TRUYỀN, GIÁO DỤC PHÁP LUẬT VỀ AN NINH MẠNG VÀ PHÒNG CHỐNG TỘI PHẠM CÔNG NGHỆ CAO CHO THANH THIẾU NIÊN"
+            },
+            en: {
+                nav_overview: "OVERVIEW", nav_structure: "STRUCTURE", nav_search: "LOOKUP", nav_checkin: "CHECK-IN", nav_minigame: "MINI GAME", nav_data: "RAW DATA",
+                hero_badge: "OFFICIAL DRAFT 2025 • 10TH SESSION - 15TH NATIONAL ASSEMBLY",
+                hero_title: "CYBERSECURITY LAW",
+                hero_desc_1: "Legal framework protecting national digital sovereignty.", hero_desc_2: "Unified • Synchronized • International Integration.",
+                btn_infographic: "VIEW INFOGRAPHIC (ENGLISH VERSION)", btn_explore: "EXPLORE NOW", btn_lookup: "LOOKUP ACTS",
+                sec_overview: "01 // OVERVIEW",
+                card_context_title: "Urgent Context", card_context_desc: "Industry 4.0 is booming. Old laws (2015, 2018) overlap and conflict. It's necessary to perfect institutions to cope with high-tech crimes and international integration (UN Convention).",
+                card_purpose_title: "Ultimate Goal", card_purpose_list: `<li><i class="fa-solid fa-check text-green-500 mr-2"></i>Unify the legal system.</li><li><i class="fa-solid fa-check text-green-500 mr-2"></i>Protect data & information systems.</li><li><i class="fa-solid fa-check text-green-500 mr-2"></i>Proactive defense & cyber offense.</li>`,
+                card_scope_title: "Scope & Subjects", card_scope_desc: `<div><strong class="text-gray-200">Scope:</strong> Protect National Security, social order, and legal rights in cyberspace.</div><div><strong class="text-gray-200">Subjects:</strong> Agencies, organizations, and individuals (VN & Foreign).</div>`,
+                time_passed: "APPROVED", time_effective: "EFFECTIVE",
+                sec_structure: "02 // DATA STRUCTURE",
+                ch1_title: "General Provisions", ch2_title: "Critical Info Systems Protection", ch3_title: "Prevention & Handling", ch4_title: "Protection Activities", ch5_title: "Technical Standards", ch6_title: "Cybersecurity Business", ch7_title: "Assurance Conditions", ch8_title: "Legal Responsibility", ch9_title: "Enforcement Provisions",
+                sec_compliance: "03 // COMPLIANCE DATABASE",
+                tab_prohibited: "PROHIBITED", tab_encouraged: "ENCOURAGED",
+                ai_desc: "Puso AI Assistant has learned the entire Draft Law.", btn_chat: "CHAT WITH PUSO AI",
+                sec_checkin: "04 // DIGITAL CITIZEN ID",
+                checkin_title: "Generate Certificate", checkin_desc: "Confirm your commitment to a safe cyberspace.", btn_upload: "UPLOAD PHOTO", btn_download: "EXPORT ID CARD", id_text: "I LEARN CYBERSECURITY LAW 2025",
+                sec_minigame: "05 // CYBER CHALLENGE",
+                game_title: "KNOWLEDGE QUIZ", game_desc: "Pass 10 questions from the 2025 Cybersecurity Law Draft data. Test your knowledge now!", btn_start_game: "START NOW", game_finish: "COMPLETED!", game_finish_desc: "You have completed the test.", btn_replay: "Play Again",
+                project_title: "BUILDING MULTILINGUAL PUBLICATION FOR PROPAGANDA AND LEGAL EDUCATION ON CYBERSECURITY AND HIGH-TECH CRIME PREVENTION FOR YOUTH"
+            },
+            ba: {
+                nav_overview: "HƠTŬM TƠDRONG KĂL", nav_structure: "PƠM PƠJING", nav_search: "CHĂ NĂNG PƠNHEN", nav_checkin: "CHECK-IN", nav_minigame: "MINI GAME", nav_data: "KHONG TƠMAM TƠM WĂ BƠ̆ JANG",
+                hero_badge: "PƠĐĂP HƠDROI TƠDRONG TƠPĂ 2025 • TƠDRONG HƠKŎM MĂ 10 – HƠK ŎM TEH ĐAK MĂ XV",
+                hero_title: "LUÂT SƠNÊP MẠNG",
+                hero_desc_1: "Hang lơng tơdrong tơm lơ̆m luât wei wer sơnong pơgơ̆r kơxô̆ teh đak.", hero_desc_2: "Lăp đon dihbăl • Hrơ̆m hrơ̆m • Pơyŭp mŭt khul jơ̆p teh đak.",
+                btn_infographic: "NĂNG INFOGRAPHIC", btn_explore: "CHĂ ‘BÔH KƠTĂ", btn_lookup: "CHĂ NĂNG WĂ LƠLĔ TƠDAH TƠDRONG BƠNGAI PƠM",
+                sec_overview: "01 // HƠTŬM TƠDRONG KĂL",
+                card_context_title: "Tơdrong tơ‘bôh kăl hăt", card_context_desc: "CMCN 4.0 lơlan pran jăng. Luât so (ATTTM 2015, ANM 2018) oei hơtăl găl, bĭ lăp dihbăl, Kăl kơ ‘lơng đĭ đăng tơdrong pơgơ̆r kiơ̆ tơdrong yoch công nghệ kơjung păng mŭt khul jơ̆p teh đak (Tơdrong pơkă hơtŭm LHQ).",
+                card_purpose_title: "Tơdrong tơm kơjung hloh", card_purpose_list: `<li><i class="fa-solid fa-check text-green-500 mr-2"></i>Lăp đon dihbăl pơma kơjăp gah tơdrong luât.</li><li><i class="fa-solid fa-check text-green-500 mr-2"></i>Wei năng khong tơmam wă bơ̆ jang & pơma kơjăp gah tơdrong ră pơtơ̆ng.</li><li><i class="fa-solid fa-check text-green-500 mr-2"></i>Pơm kơdih pring wei & drŭt kiơ̆ mạng.</li>`,
+                card_scope_title: "Lơ̆m kơvăl & bơ ngai bơ̆ chă", card_scope_desc: `<div><strong class="text-gray-200">Phạm vi:</strong> Wei năng ANQG, ‘lăn thĕng ATXH, gơh pơyuơ trŏ tơdrong lơ̆m không gian mạng.</div><div><strong class="text-gray-200">Đối tượng:</strong>Hơnih hnam jang, tơ’nhăk po Viêt Nam & teh đak hơgah.</div>`,
+                time_passed: "PƠRĂ ĂN LƠLĔ", time_effective: "TƠDRONG XĬT",
+                sec_structure: "02 // RƠTĂP JING KHONG TƠMAM WĂ BƠ̆ JANG",
+                ch1_title: "Pơkă hơtŭm", ch2_title: "Wei năng HTTT kăl tơngăm", ch3_title: "J ră dơ̆t & bơ̆ ming", ch4_title: "Tơdrong jang wei năng", ch5_title: "Tiêu chuẩn kỹ thuật", ch6_title: "Pơdro sa ANM", ch7_title: "Điều kiện hơĭn sơnêp", ch8_title: "Sơnong pháp lý", ch9_title: "Điều khoản thi hành",
+                sec_compliance: "03 // HƠNIH KHONG TƠMAM WĂ BƠ̆ JANG PƠM ‘MOI",
+                tab_prohibited: "KHĂ PƠGƠ̆T", tab_encouraged: "KHUYẾN KHÍCH",
+                ai_desc: "Bơngai tơgŭm plach sang pơhrăm tôm tơdrong hla bơar chih ‘măn pơđăp pơm.", btn_chat: "CHAT PĂNG PUSO AI",
+                sec_checkin: "04 // KƠXÔ̆ BƠNGAI GƠH YUA GAH CÔNG NGHỆ",
+                checkin_title: "Bơ̆ theh hla bơar iŏk pơtĭl", checkin_desc: "Pơm pơtĭl pơkăp bôl kiơ̆ kơ không gian mạng hơĭn sơnêp.", btn_upload: "TAIH HƠTŎK UM", btn_download: "TƠLĔCH THEH ID", id_text: "ĬNH CHĂ WAO LUÂT ANM 2025",
+                sec_minigame: "05 // PƠJOT TƠDRONG SƠNÊP LƠ̆M MẠNG",
+                game_title: "RƠIH MĂ TRŎ TƠDRONG HLÔH WAO", game_desc: "Găn hloh 10 trong nơ̆r jet dơ̆ng dữ liệu pơ đăp pơm Luât.", btn_start_game: "PƠTƠM KƠTĂ", game_finish: "KLAIH ĐANG!", game_finish_desc: "Bôl sang bơ̆ klaih đang ‘bai pơnol.", btn_replay: "Ngôi laĭ",
+                project_title: "PƠJING BỘ HLABAR IN LƠ NÂR TOBANG PƠANG, BƠTHO NHĂK KHÔI LUÂT GAH SƠNÊP MẠNG PĂNG DÂT PƠJRĂ LU 'MÊ̆ CÔNG NGHỆ CAO ĂN KƠ ĐE HAIOH TƠDĂM"
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Kích hoạt font Bahnar qua class CSS
+            if (currentLang === 'ba') {
+                document.body.classList.add('lang-ba');
+            } else {
+                document.body.classList.remove('lang-ba');
+            }
+            
+            // 1. Update Text Elements
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    if (el.innerHTML.includes('<')) { // Preserve HTML structure for lists
+                        el.innerHTML = translations[lang][key];
+                    } else {
+                        el.innerText = translations[lang][key];
+                    }
+                }
+            });
+
+            // 2. Update Navbar Buttons State
+            document.getElementById('nav-btn-vn').className = lang === 'vn' ? "text-xs font-bold text-cyan-400" : "text-xs font-bold text-gray-500 hover:text-white";
+            document.getElementById('nav-btn-en').className = lang === 'en' ? "text-xs font-bold text-cyan-400" : "text-xs font-bold text-gray-500 hover:text-white";
+            document.getElementById('nav-btn-ba').className = lang === 'ba' ? "text-xs font-bold text-cyan-400" : "text-xs font-bold text-gray-500 hover:text-white";
+            
+            // 3. Update Video Section Buttons State
+            const btnLangVN = document.getElementById('btn-lang-vn');
+            const btnLangEN = document.getElementById('btn-lang-en');
+            const btnLangBA = document.getElementById('btn-lang-ba');
+            
+            btnLangVN.classList.remove('lang-btn-active');
+            btnLangEN.classList.remove('lang-btn-active');
+            btnLangBA.classList.remove('lang-btn-active');
+
+            if (lang === 'vn') {
+                btnLangVN.classList.add('lang-btn-active');
+                document.getElementById('main-video').src = videoVN;
+            } else if (lang === 'en') {
+                btnLangEN.classList.add('lang-btn-active');
+                document.getElementById('main-video').src = videoEN;
+            } else if (lang === 'ba') {
+                btnLangBA.classList.add('lang-btn-active');
+                document.getElementById('main-video').src = videoBA;
+            }
+
+            // 4. Update Dynamic Content
+            renderActs();
+            
+            // Nếu đang chơi game thì reset game để tải câu hỏi ngôn ngữ mới
+            if (!document.getElementById('game-play').classList.contains('hidden')) {
+                startGame(); 
+            }
+        }
+
+        // --- 2. LOGIC FUNCTIONS ---
+        // Dữ liệu Game tiếng Việt
+        const gameDataVN = [
+            { q: "Theo Tờ trình Chính phủ, lý do chính cần ban hành Luật An ninh mạng mới là gì?", a: ["Để hợp nhất Luật ATTTM 2015 và Luật ANM 2018.", "Để thay thế hoàn toàn Bộ luật Hình sự.", "Để tăng thuế doanh nghiệp công nghệ.", "Để cấm mạng xã hội."], correct: 0 },
+            { q: "Dự thảo Luật 2025 định nghĩa 'An ninh mạng' bảo vệ yếu tố nào?", a: ["Chỉ hệ thống máy chủ.", "Thông tin, HTTT, không gian mạng & ANQG.", "Chỉ dữ liệu doanh nghiệp.", "Chỉ bí mật đời tư."], correct: 1 },
+            { q: "'Tài sản số' có đặc điểm gì theo Dự thảo 2025?", a: ["Là tiền ảo Bitcoin.", "Là file Word/Excel.", "Xác thực bằng blockchain, có giá & quyền tài sản.", "Là tài khoản mạng xã hội."], correct: 2 },
+            { q: "Xung đột thông tin là do ai thực hiện?", a: ["Hacker cá nhân.", "Lỗi phần mềm.", "Hai hoặc nhiều tổ chức sử dụng biện pháp công nghệ.", "Thiên tai."], correct: 2 },
+            { q: "Dự thảo Luật 2025 có cấu trúc như thế nào?", a: ["08 chương, 50 điều.", "09 chương, 58 điều.", "10 chương, 65 điều.", "07 chương, 45 điều."], correct: 1 }
+        ];
+
+        // Dữ liệu Game tiếng Anh
+        const gameDataEN = [
+            { q: "What is the main reason for promulgating the new Cybersecurity Law?", a: ["To merge the 2015 and 2018 Laws.", "To replace the Penal Code.", "To increase tech taxes.", "To ban social media."], correct: 0 },
+            { q: "What does the 2025 Draft define 'Cybersecurity' as protecting?", a: ["Only servers.", "Info, Systems, Cyberspace & National Security.", "Only corporate data.", "Only privacy."], correct: 1 },
+            { q: "What is a characteristic of 'Digital Assets' according to the Draft?", a: ["It's Bitcoin.", "Word/Excel files.", "Blockchain verified, has value & property rights.", "Social media accounts."], correct: 2 },
+            { q: "Who carries out an information conflict?", a: ["Individual hackers.", "Software bugs.", "Two or more organizations using tech measures.", "Natural disasters."], correct: 2 },
+            { q: "What is the structure of the 2025 Draft Law?", a: ["8 chapters, 50 articles.", "9 chapters, 58 articles.", "10 chapters, 65 articles.", "7 chapters, 45 articles."], correct: 1 }
+        ];
+
+        // Dữ liệu Game tiếng Bahnar (Bạn thay thế [BA] bằng từ vựng chính xác)
+        const gameDataBA = [
+            { q: "Kiơ̆ hla bơar tơ‘bôh chinh phuh, lý do mă mônh kăl ăn Luât tơdrong sơnêp lơ̆m mạng ‘nao jĭ kiơ?", a: ["Wă mă trŏ jat Luât ATTTM 2015 păng Luât ANM 2018.", "Thay thế Bộ luật Hình sự.", "Tăng thuế.", "Cấm mạng xã hội."], correct: 0 },
+            { q: "Pơđăp pơm Luât 2025 định nghĩa’ sơnêp mang’ Wei wer yếu tố mă yơ?", a: ["Chỉ máy chủ.", "Tơ drong pơ ră,HTTT,không gian mạng & ANQG", "Dữ liệu doanh nghiệp.", "Bí mật đời tư."], correct: 1 },
+            { q: "‘Khong tơmam kơxô̆’ đei tơdrong pha kiơ kiơ̆ kơ pơđăp pơm 2025?", a: ["Là Bitcoin.", "File Word.", "Pơm pơtĭl blockchain, đei giá trị păng quyên khong tơmam.", "Tài khoản MXH."], correct: 2 },
+            { q: "Tơjră tơdrong pơră jĭ yua bu tơ‘nhăk?", a: ["Hacker.", "Lỗi phần mềm.", "Bar dah lơ tơ‘nhăk iŏk yua tơdrong pơm công nghệ.", "Thiên tai."], correct: 2 },
+            { q: "Pơđăp pơm luât 2025 đei rơtăp jing thoi yơ?", a: ["08 chương.", "09 chăl, 58 tơdrong.", "10 chương.", "07 chương."], correct: 1 }
+        ];
+
+        // Compliance Logic
+        const complianceData = {
+    vn: {
+        prohibited: [
+            { category: "Chính trị", icon: "fa-landmark", content: "Chống Nhà nước: Tuyên truyền xuyên tạc, phỉ báng chính quyền." },
+            { category: "An ninh", icon: "fa-user-secret", content: "Gián điệp mạng: Chiếm đoạt bí mật Nhà nước." },
+            { category: "Kinh tế", icon: "fa-money-bill-trend-up", content: "Kinh doanh trái phép: Mua bán vũ khí, tiền giả." },
+            { category: "Xã hội", icon: "fa-users", content: "Xâm phạm danh dự, nhân phẩm, vu khống." }
+        ],
+        encouraged: [
+            { title: "Tuân thủ", content: "Chấp hành nghiêm quy định pháp luật." },
+            { title: "Bảo vệ", content: "Tự bảo vệ thông tin cá nhân và tài khoản." },
+            { title: "Tố giác", content: "Báo tin tội phạm cho cơ quan chức năng." }
+        ]
+    },
+    en: {
+        prohibited: [
+            { category: "Politics", icon: "fa-landmark", content: "Anti-State: Propagating distortion, defaming the government." },
+            { category: "Security", icon: "fa-user-secret", content: "Cyber espionage: Misappropriating State secrets." },
+            { category: "Economy", icon: "fa-money-bill-trend-up", content: "Illegal business: Trading weapons, counterfeit money." },
+            { category: "Society", icon: "fa-users", content: "Infringing on honor, dignity, slander." }
+        ],
+        encouraged: [
+            { title: "Compliance", content: "Strictly comply with legal regulations." },
+            { title: "Protection", content: "Self-protect personal info and accounts." },
+            { title: "Denunciation", content: "Report crimes to authorities." }
+        ]
+    },
+    ba: {
+        prohibited: [
+            // Thay thế bằng từ vựng tiếng Bahnar chuẩn
+            { category: "Chính trị", icon: "fa-landmark", content: "Jră teh đak: Tuyên truyền xuyên tạc, phỉ báng chính quyền." },
+            { category: "Sơnêp", icon: "fa-user-secret", content: "Sep sop lơ̆m mạng: Pơjei iŏk tơdrong srep hlơp teh đak." },
+            { category: "Kinh tế", icon: "fa-money-bill-trend-up", content: "Pơdro sa bĭ trŏ: Tĕch pơdro khong tơblah, jên plach." },
+            { category: "[BA] Xã hội", icon: "fa-users", content: "[BA] Xâm phạm danh dự..." }
+        ],
+        encouraged: [
+            { title: "Pơm kiơ̆", content: "Pơm ‘moi chơtăng phap luât pơkă." },
+            { title: "Wei năng", content: "Wei năng kơdih tơdrong pơră po tơ‘ngla păng tài khoản." },
+            { title: "Dah pơră", content: "Ră pơtơ̆ng mu trŏ yoch kơ hơnih hnam jang tih." }
+        ]
+    }
+};
+
+        let currentTab = 'prohibited';
+        const container = document.getElementById('list-content');
+
+        function renderActs(filterText = '') {
+    container.innerHTML = '';
+    
+    // Tự động lấy mảng dữ liệu dựa trên ngôn ngữ (currentLang) và tab (currentTab)
+    const data = complianceData[currentLang][currentTab];
+    
+    data.forEach(item => {
+        let displayCat = item.category || item.title;
+        let displayContent = item.content;
+
+        if (filterText && !displayContent.toLowerCase().includes(filterText.toLowerCase())) return;
+
+        const el = document.createElement('div');
+        if (currentTab === 'prohibited') {
+            el.className = 'glass-card p-4 rounded border-l-4 border-red-500 flex gap-4 items-start animate-[fadeIn_0.3s_ease]';
+            el.innerHTML = `<div class="w-10 h-10 rounded bg-red-500/10 flex items-center justify-center text-red-500 shrink-0"><i class="fa-solid ${item.icon}"></i></div><div><div class="text-xs text-red-400 font-bold uppercase">${displayCat}</div><div class="text-sm text-gray-300">${displayContent}</div></div>`;
+        } else {
+            el.className = 'glass-card p-4 rounded border-l-4 border-green-500 flex gap-4 items-start animate-[fadeIn_0.3s_ease]';
+            el.innerHTML = `<div class="w-10 h-10 rounded bg-green-500/10 flex items-center justify-center text-green-500 shrink-0"><i class="fa-solid fa-check"></i></div><div><div class="text-sm font-bold text-green-400">${displayCat}</div><div class="text-sm text-gray-300">${displayContent}</div></div>`;
+        }
+        container.appendChild(el);
+    });
+    
+    document.getElementById('count-prohibited').textContent = complianceData[currentLang].prohibited.length;
+    document.getElementById('count-encouraged').textContent = complianceData[currentLang].encouraged.length;
+}
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.getElementById('tab-prohibited').classList.toggle('active', tab === 'prohibited');
+            document.getElementById('tab-prohibited').classList.toggle('text-gray-400', tab !== 'prohibited');
+            document.getElementById('tab-encouraged').classList.toggle('active', tab === 'encouraged');
+            document.getElementById('tab-encouraged').classList.toggle('text-gray-400', tab !== 'encouraged');
+            renderActs();
+        }
+
+        function filterActs() { renderActs(document.getElementById('act-search').value); }
+        
+        // Game Engine
+        let gameState = { score: 0, currentQ: 0 };
+        function startGame() {
+            gameState.score = 0; gameState.currentQ = 0;
+            document.getElementById('game-start').classList.add('hidden');
+            document.getElementById('game-result').classList.add('hidden');
+            document.getElementById('game-play').classList.remove('hidden');
+            loadQuestion();
+        }
+        function loadQuestion() {
+            let activeGameData = gameDataVN;
+            if (currentLang === 'en') activeGameData = gameDataEN;
+            else if (currentLang === 'ba') activeGameData = gameDataBA;
+
+            const qData = activeGameData[gameState.currentQ];
+            document.getElementById('q-current').innerText = gameState.currentQ + 1;
+            document.getElementById('current-score').innerText = gameState.score;
+            document.getElementById('question-text').innerText = qData.q;
+            const optsContainer = document.getElementById('options-container');
+            optsContainer.innerHTML = '';
+            
+            qData.a.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "bg-slate-800 p-4 rounded hover:bg-cyan-900/50 hover:border-cyan-400 border border-gray-700 text-left transition text-sm md:text-base";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(idx);
+                optsContainer.appendChild(btn);
+            });
+        }
+        function checkAnswer(selectedIdx) {
+            let activeGameData = gameDataVN;
+            if (currentLang === 'en') activeGameData = gameDataEN;
+            else if (currentLang === 'ba') activeGameData = gameDataBA;
+
+            const correctIdx = activeGameData[gameState.currentQ].correct;
+            const buttons = document.getElementById('options-container').children;
+            
+            if(selectedIdx === correctIdx) { gameState.score += 10; buttons[selectedIdx].classList.add('bg-green-600', 'border-green-400'); }
+            else { buttons[selectedIdx].classList.add('bg-red-600', 'border-red-400'); buttons[correctIdx].classList.add('bg-green-600', 'border-green-400'); }
+            
+            for(let btn of buttons) btn.disabled = true;
+            setTimeout(() => { 
+                gameState.currentQ++; 
+                if(gameState.currentQ < activeGameData.length) loadQuestion(); 
+                else endGame(); 
+            }, 1200);
+        }
+        function endGame() {
+            document.getElementById('game-play').classList.add('hidden');
+            document.getElementById('game-result').classList.remove('hidden');
+            document.getElementById('final-score').innerText = gameState.score;
+        }
+        function resetGame() {
+            document.getElementById('game-result').classList.add('hidden');
+            document.getElementById('game-start').classList.remove('hidden');
+        }
+
+        // Chat & Modal
+        function toggleChatModal() { document.getElementById('chat-modal').classList.toggle('active'); }
+        function handleChat(e) { e.preventDefault(); /* Simplified Chat Logic */ }
+        
+        // --- VIEWERS ---
+        const docModal = document.getElementById('doc-viewer-modal');
+        const docFrame = document.getElementById('doc-frame');
+        const defaultDocUrl = "https://docs.google.com/document/d/1Y2X8pyEKUp7790Br0-bUNfiXIUToP4X2/preview";
+
+        function openDocViewer() {
+            document.getElementById('modal-title').innerText = "DATABASE: LUAT_2025.DOCX";
+            loadModalContent(defaultDocUrl);
+        }
+
+        function openInfoGraphic() {
+            let url = infoGraphicVN;
+            let title = "INFOGRAPHIC_VN.PDF";
+            
+            if (currentLang === 'en') {
+                url = infoGraphicEN;
+                title = "INFOGRAPHIC_EN.PDF";
+            } else if (currentLang === 'ba') {
+                url = infoGraphicBA;
+                title = "INFOGRAPHIC_BA.PDF";
+            }
+
+            document.getElementById('modal-title').innerText = "VISUAL DATA: " + title;
+            loadModalContent(url);
+        }
+
+        function loadModalContent(url) {
+            docModal.classList.add('active');
+            document.getElementById('viewer-loading').style.display = 'flex';
+            docFrame.src = url;
+            docFrame.onload = () => document.getElementById('viewer-loading').style.display = 'none';
+        }
+        function closeDocViewer() { docModal.classList.remove('active'); docFrame.src = ""; }
+
+        function downloadCheckin() {
+            const checkinArea = document.getElementById('checkin-area');
+            html2canvas(checkinArea, { scale: 3, useCORS: true, backgroundColor: '#0f172a' }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'ID-PUSO-Connect-2025.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        document.getElementById('upload-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) { document.getElementById('user-photo').src = e.target.result; }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Initialize
+        setLanguage('vn'); // Set default language
+    </script>
+</body>
+</html>
